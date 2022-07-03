@@ -9,6 +9,7 @@ data "aws_caller_identity" "current" {}
      values = ["amazon"]
    }
 
+
    filter {
      name   = "name"
      values = ["amzn2-ami-hvm*"]
