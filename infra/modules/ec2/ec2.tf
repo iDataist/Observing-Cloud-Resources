@@ -1,15 +1,15 @@
-resource "aws_instance" "web" {
+resource "aws_instance" "ubuntu" {
   ami           = var.aws_ami
   count = var.instance_count
   instance_type = var.instance_type
   key_name = "udacity"
   subnet_id = var.public_subnet_ids[0]
   vpc_security_group_ids = [aws_security_group.ec2_sg.id]
+
   tags = {
-    Name = "ubuntu"
+    Name = "Ubuntu-Web"
   }
 }
-
 
 resource "aws_security_group" "ec2_sg" {
   name        = "ec2_sg"
