@@ -1,24 +1,21 @@
-https://docs.google.com/document/d/1BTIbtQgzMxtnUbfYrrgnYt8RA9_zZLDNSTUDPh2Lt7k/edit?usp=sharing
+# make .gitignore work
+git rm -r --cached .
 
-# sed -i 's/us-east-2/us-east-2/g' _config.tf
-# find ./ -type f -exec sed -i -e 's/udacity-tf-tscotto/udacity-tf-huiren/g' {} \;
+# vim delete all lines
+:%d
 
+# assess AZs in a region
 aws ec2 describe-availability-zones --region us-east-2
 
 aws ec2 create-restore-image-task --object-key ami-08dff635fabae32e7.bin --bucket udacity-srend --name "udacity-project-1"
 #ami-030c415a676e1cd50
-
 aws ec2 copy-image --source-image-id ami-030c415a676e1cd50 --source-region us-east-1 --region us-east-2 --name "udacity-project-1"
 #ami-06b41aa13fa02f388
 
-
-aws s3api create-bucket --bucket terraform-tf-huiren --region us-east-2 --create-bucket-configuration LocationConstraint=us-east-2
-aws s3api create-bucket --bucket udacity-tf-huiren-west --region us-west-2 --create-bucket-configuration LocationConstraint=us-west-2
-aws s3 rm s3://udacity-tf-huiren --recursive
-aws s3api delete-bucket --bucket udacity-tf-huiren-west
-
+aws s3api create-bucket --bucket udacity-tf-huiren --region us-east-2 --create-bucket-configuration LocationConstraint=us-east-2
+aws s3 rm s3://terraform-tf-huiren --recursive
+aws s3api delete-bucket --bucket terraform-tf-huiren
 aws ec2 create-key-pair --key-name udacity --region us-east-2
-aws ec2 create-key-pair --key-name udacity --region us-west-2
 
 # helm
 export VERIFY_CHECKSUM=false
@@ -51,6 +48,36 @@ kubectl get pods --namespace monitoring
 kubectl create secret generic additional-scrape-configs --from-file=prometheus-additional.yaml --namespace monitoring
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm install prometheus prometheus-community/kube-prometheus-stack -f "values.yaml" --namespace monitoring
-
+helm install prometheus-blackbox-exporter prometheus-community/prometheus-blackbox-exporter -f "blackbox-values.yaml" --namespace monitoring
 # kubectl delete all --all -n monitoring
+
+# install node-exporter
+ssh -i "udacity.pem" ubuntu@ec2-52-14-161-49.us-east-2.compute.amazonaws.com
+sudo useradd --no-create-home --shell /bin/false node_exporter
+wget https://github.com/prometheus/node_exporter/releases/download/v1.2.2/node_exporter-1.2.2.linux-amd64.tar.gz
+tar xvfz node_exporter-1.2.2.linux-amd64.tar.gz
+sudo cp node_exporter-1.2.2.linux-amd64/node_exporter /usr/local/bin
+sudo chown node_exporter:node_exporter /usr/local/bin/node_exporter
+sudo vim /etc/systemd/system/node_exporter.service
+sudo systemctl daemon-reload
+sudo systemctl enable node_exporter
+sudo systemctl start node_exporter
+sudo systemctl status node_exporter
+sudo ufw allow 9100/tcp
+sudo systemctl restart ufw
+# [Unit]
+# Description=Node Exporter
+# Wants=network-online.target
+# After=network-online.target
+
+# [Service]
+# User=node_exporter
+# Group=node_exporter
+# Type=simple
+# ExecStart=/usr/local/bin/node_exporter
+
+# [Install]
+# WantedBy=multi-user.target
+
+
 
