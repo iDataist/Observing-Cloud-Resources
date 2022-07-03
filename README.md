@@ -1,8 +1,6 @@
 # Establish a Foundation in Observability
 
-In this project, students will apply the skills they have acquired in the Establish a Foundation in Observability course to configure a monitoring software stack to collect and display a variety of metrics for commonly used AWS resources which include EC2 and EKS. Additionally, students will establish and configure rules for alerting and set parameters to be notified prior to the occurence of failures within the aformentioned cloud resources. 
-
-Students will also have the opportunity to test and observe thier own implentation of the monitoring software stack to apply and showcase SRE methodologies and practices which can be transferred to real-world scenarios.  
+In this project, I configured a monitoring software stack to collect and display a variety of metrics for commonly used AWS resources which include EC2 and EKS. Then, I established and configured rules for alerting and set parameters to be notified prior to the occurence of failures within the aformentioned cloud resources. Lastly, I tested and observed the monitoring stack to apply SRE methodologies and practices.
 
 ## Getting Started
 
@@ -41,10 +39,7 @@ Students will also have the opportunity to test and observe thier own implentati
 
     - Make note of the ami output from the above 2 commands. You'll need to put this in the `ec2.tf` file.
 3. Create a private key pair for your EC2 instance called `udacity`
-
-
 4. Use the terraform files to provision each of the resources in AWS; it will take a few minutes to complete. Once the script is complete, you can go to the AWS and look for the the newly created resources in the EKS and EC2 areas. 
-
 5. SSH into the EC2 instance with username `ubuntu` and the udacity key created in a previous step.
 6. Install the node exporter on the EC2 instance. Don't forget to allow traffic on port 9100.
 
@@ -142,19 +137,6 @@ helm repo update
 3. Cause the host metrics alerts to trigger.
 4. Cause the flask endpoint to go offline.
 
-## Submissions
-1. A zip file containing screenshots from Grafana which include:
-    * The dashboard for EC2 CPU utilization.
-    * The dashboard for EC2 Memory utilization.
-    * The dashboard for EC2 Disk I/O.
-    * The dashboard for EC2 Network utilization.
-    * The imported dashboard for Blackbox Exporter.
-    * The dashboard showing that an alert triggered (could be one of CPU/memory/disk/network utilization).
-    * The message from the alert--this can be in slack, email or other.
-    * The alert showing that the flask app is offline.
-    * The alert showing that the flask app is back online.
-    * The list of alerting rules.
-2. The screenshot of the node_exporter service running on the EC2 instance `sudo systemctl status node_exporter`
 
 ## Built With
 ### Software
